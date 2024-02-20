@@ -21,12 +21,15 @@ namespace app
       {
       case WIFI_EVENT_STA_START:
         ESP_LOGI(TAG, "WiFi connecting WIFI_EVENT_STA_START ... \n");
+        esp_wifi_connect();
         break;
       case WIFI_EVENT_STA_CONNECTED:
         ESP_LOGI(TAG, "WiFi connected WIFI_EVENT_STA_CONNECTED ... \n");
         break;
       case WIFI_EVENT_STA_DISCONNECTED:
         ESP_LOGE(TAG, "WiFi lost connection WIFI_EVENT_STA_DISCONNECTED ... \n");
+        ESP_LOGE(TAG, "Retrying ... \n");
+        esp_wifi_connect();
         break;
       case IP_EVENT_STA_GOT_IP:
         ESP_LOGI(TAG, "WiFi got IP ... \n");
@@ -55,7 +58,6 @@ namespace app
       esp_wifi_set_config(WIFI_IF_STA, &wifi_config);
       esp_wifi_set_mode(WIFI_MODE_STA);
       esp_wifi_start();
-      esp_wifi_connect();
       return ESP_OK;
     }
   };
