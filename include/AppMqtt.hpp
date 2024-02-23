@@ -2,6 +2,7 @@
 
 #include <mqtt_client.h>
 #include <esp_log.h>
+#include <AppLed.hpp>
 
 const char *TAGMQTT = "mqtt_log";
 namespace app
@@ -25,6 +26,8 @@ namespace app
       esp_mqtt_event_handle_t event = static_cast<esp_mqtt_event_handle_t>(event_data);
       esp_mqtt_client_handle_t client = event->client;
       int msg_id;
+      const char *data = event->data;
+      const char *topic = event->topic;
       switch ((esp_mqtt_event_id_t)event_id)
       {
       case MQTT_EVENT_CONNECTED:
@@ -51,8 +54,24 @@ namespace app
 
       case MQTT_EVENT_DATA:
         ESP_LOGI(TAGMQTT, "MQTT_EVENT_DATA");
-        printf("TOPIC=%.*s\r\n", event->topic_len, event->topic);
-        printf("DATA=%.*s\r\n", event->data_len, event->data);
+        printf("TOPIC=%.*s\r\n", event->topic_len, topic);
+        printf("DATA=%.*s\r\n", event->data_len, data);
+        if (strcmp(topic, "/light") == 0)
+        {
+          ESP_LOGI(TAGMQTT, "T0oosa");
+          app::AppLed led = app::AppLed();
+          led.init();
+          if (strcmp(data, "On") == 0)
+          {
+            ESP_LOGI(TAGMQTT, "ON");
+            led.set(true);
+          }
+          if (strcmp(data, "Off") == 0)
+          {
+            ESP_LOGI(TAGMQTT, "OFF");
+            led.set(false);
+          }
+        }
         break;
 
       case MQTT_EVENT_ERROR:
