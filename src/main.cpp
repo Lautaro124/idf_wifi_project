@@ -1,9 +1,10 @@
-#include <AppWifi.h>
+#include <AppWifi.hpp>
 #include <AppMqtt.hpp>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
 using namespace app;
+
 extern "C" void app_main()
 {
   AppWifi app_wifi = AppWifi();

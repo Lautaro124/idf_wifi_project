@@ -54,7 +54,8 @@ namespace app
           .sta{
               .ssid = SSID,
               .password = PASSWORD,
-          }};
+          },
+      };
       esp_wifi_set_config(WIFI_IF_STA, &wifi_config);
       esp_wifi_set_mode(WIFI_MODE_STA);
       esp_wifi_start();
