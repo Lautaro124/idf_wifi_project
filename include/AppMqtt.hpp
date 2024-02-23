@@ -26,8 +26,9 @@ namespace app
       esp_mqtt_event_handle_t event = static_cast<esp_mqtt_event_handle_t>(event_data);
       esp_mqtt_client_handle_t client = event->client;
       int msg_id;
-      const char *data = event->data;
-      const char *topic = event->topic;
+      const char *mqtt_on = "On";
+      const char *mqtt_off = "Off";
+      const char *mqtt_topic = "/light";
       switch ((esp_mqtt_event_id_t)event_id)
       {
       case MQTT_EVENT_CONNECTED:
@@ -54,19 +55,19 @@ namespace app
 
       case MQTT_EVENT_DATA:
         ESP_LOGI(TAGMQTT, "MQTT_EVENT_DATA");
-        printf("TOPIC=%.*s\r\n", event->topic_len, topic);
-        printf("DATA=%.*s\r\n", event->data_len, data);
-        if (strcmp(topic, "/light") == 0)
+        printf("TOPIC=%.*s\r\n", event->topic_len, event->topic);
+        printf("DATA=%.*s\r\n", event->data_len, event->data);
+        if (strncmp(event->topic, mqtt_topic, event->topic_len) == 0)
         {
           ESP_LOGI(TAGMQTT, "T0oosa");
           app::AppLed led = app::AppLed();
           led.init();
-          if (strcmp(data, "On") == 0)
+          if (strncmp(event->data, mqtt_on, event->data_len) == 0)
           {
             ESP_LOGI(TAGMQTT, "ON");
             led.set(true);
           }
-          if (strcmp(data, "Off") == 0)
+          if (strncmp(event->data, mqtt_off, event->data_len) == 0)
           {
             ESP_LOGI(TAGMQTT, "OFF");
             led.set(false);
