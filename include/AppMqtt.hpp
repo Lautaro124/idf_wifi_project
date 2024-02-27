@@ -64,12 +64,12 @@ namespace app
           led.init();
           if (strncmp(event->data, mqtt_on, event->data_len) == 0)
           {
-            ESP_LOGI(TAGMQTT, "ON");
+            ESP_LOGI(TAGMQTT, "On");
             led.set(true);
           }
           if (strncmp(event->data, mqtt_off, event->data_len) == 0)
           {
-            ESP_LOGI(TAGMQTT, "OFF");
+            ESP_LOGI(TAGMQTT, "Off");
             led.set(false);
           }
         }
